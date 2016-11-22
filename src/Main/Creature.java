@@ -26,15 +26,15 @@ public class Creature {
 	int lastScore = 0;
 	
 	public Creature(){
-		x = MainClass.WIDTH/2;
-		y = MainClass.HEIGHT/2;
+		x = MainState.BOARD_WIDTH/2;
+		y = MainState.BOARD_HEIGHT/2;
 		
 		brain = new Brain(2, 4, 3, 20, 20);
 	}
 	
 	public Creature(Brain b){
-		x = MainClass.WIDTH/2;
-		y = MainClass.HEIGHT/2;
+		x = MainState.BOARD_WIDTH/2;
+		y = MainState.BOARD_HEIGHT/2;
 		
 		brain = b;
 	}
@@ -44,8 +44,8 @@ public class Creature {
 	}
 	
 	public void reset(){
-		x = MainClass.WIDTH/2;
-		y = MainClass.HEIGHT/2;
+		x = MainState.BOARD_WIDTH/2;
+		y = MainState.BOARD_HEIGHT/2;
 		
 		
 		time = 0;
@@ -68,8 +68,13 @@ public class Creature {
 		
 		g.setColor(Color.black);
 		double t = Math.tan(Math.toRadians(fov/2));
-		g.drawLine((int)x, (int)y, (int)(x-(t*MainClass.HEIGHT)), (int)y-MainClass.HEIGHT);
-		g.drawLine((int)x, (int)y, (int)(x+(t*MainClass.HEIGHT)), (int)y-MainClass.HEIGHT);
+		
+		int ly = (int)y-MainState.BOARD_HEIGHT;
+		
+		if(ly > MainState.BOARD_HEIGHT-y) ly = (int) (MainState.BOARD_HEIGHT-y);
+		
+		g.drawLine((int)x, (int)y, (int)(x-(t*MainState.BOARD_HEIGHT)), ly);
+		g.drawLine((int)x, (int)y, (int)(x+(t*MainState.BOARD_HEIGHT)), ly);
 		
 		if(!canSee) g.setColor(Color.red);
 		else g.setColor(Color.orange);
@@ -90,8 +95,8 @@ public class Creature {
 		if(x-radius < 0) x = radius;
 		if(y-radius < 0) y = radius;
 		
-		if(x+radius > MainClass.WIDTH) x = MainClass.WIDTH-radius;
-		if(y+radius > MainClass.HEIGHT) y = MainClass.HEIGHT-radius;
+		if(x+radius > MainState.BOARD_WIDTH) x = MainState.BOARD_WIDTH-radius;
+		if(y+radius > MainState.BOARD_HEIGHT) y = MainState.BOARD_HEIGHT-radius;
 	}
 	
 	public void update(Trainer t){

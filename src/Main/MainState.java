@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import API.MainClass;
 import API.State;
@@ -18,10 +20,15 @@ public class MainState extends State{
 	
 	long gen = 0;
 	
+	List<Creature> old = new ArrayList();
+	
 	int[] speeds = new int[]{1, 2, 4, 10, 100, 200, 400, 1000};
 	
-	
 	Trainer t;
+	Stats s;
+		
+	public static int BOARD_WIDTH = 1280;
+	public static int BOARD_HEIGHT = 720;
 
 	@Override
 	public void draw(Graphics2D g) {
@@ -29,20 +36,26 @@ public class MainState extends State{
 				 RenderingHints.KEY_ANTIALIASING,
 		         RenderingHints.VALUE_ANTIALIAS_ON);
 		 g.setRenderingHints(rh);
-		
+		 
 		g.setColor(Color.white);
-		g.fillRect(0, 0, MainClass.WIDTH, MainClass.HEIGHT);
+		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 		
 		cs[current].draw(g);
 		t.draw(g);
 		
 		g.setColor(Color.black);
 		g.drawString(speeds[speed]+"x", (MainClass.WIDTH/2-g.getFontMetrics().stringWidth(speeds[speed]+"x")/2)-100, 30);
+		
+		g.setColor(Color.gray);
+		g.fillRect(0, BOARD_HEIGHT, MainClass.WIDTH, MainClass.HEIGHT-BOARD_HEIGHT);
+		
+		s.drawGraph(g, 20, BOARD_HEIGHT+20, MainClass.WIDTH-40, MainClass.HEIGHT-BOARD_HEIGHT-40);
 	}
 
 	@Override
 	public void init() {
 		t = new Trainer();
+		s = new Stats();
 		genCreatures();
 	}
 
@@ -64,17 +77,30 @@ public class MainState extends State{
 	
 	private void newGen(){
 		quicksort(cs, 0, cs.length-1);
+		old.clear();
 		
 		HashMap<Creature, Integer> scores = new HashMap();
 		
 		System.out.print("gen "+gen+": ");
 		
+		s.addScore(cs[cs.length-1].score);
+		
+		int total = 0;
+		
 		for(Creature c : cs){
 			System.out.print(c.score+" ");
+			
+			total += c.score;
 			scores.put(c, c.score);
 			c.reset();
 		}
 		System.out.println();
+		
+		for(int i=cs.length/2; i<cs.length; i++){
+			old.add(cs[i]);
+		}
+		
+		s.addScoreAv(total/cs.length);
 
 		
 		for(int i=0; i<cs.length/2; i++){

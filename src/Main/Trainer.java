@@ -33,7 +33,7 @@ public class Trainer {
 		Random r = new Random();
 		
 		for(int i=0; i<points.length; i++)
-			points[i] = (Point2D) new Point(r.nextInt(MainClass.WIDTH), r.nextInt(MainClass.HEIGHT));
+			points[i] = (Point2D) new Point(r.nextInt(MainState.BOARD_WIDTH), r.nextInt(MainState.BOARD_HEIGHT));
 		c = points[0];
 	}
 	
@@ -48,9 +48,9 @@ public class Trainer {
 		g.fillOval((int)c.getX()-(dist/8), (int)c.getY()-(dist/8), dist/4, dist/4);
 		
 		g.setColor(Color.black);
-		g.drawString(time/60+"", MainClass.WIDTH/2-g.getFontMetrics().stringWidth(time/60+"")/2, 30);
+		g.drawString(time/60+"", MainState.BOARD_WIDTH/2-g.getFontMetrics().stringWidth(time/60+"")/2, 30);
 		
-		g.drawString(lastScore+"", (MainClass.WIDTH/2-g.getFontMetrics().stringWidth(lastScore+"")/2)+100, 30);
+		g.drawString(lastScore+"", (MainState.BOARD_WIDTH/2-g.getFontMetrics().stringWidth(lastScore+"")/2)+100, 30);
 	}
 	
 	public int reset(){
@@ -66,7 +66,7 @@ public class Trainer {
 	
 	public boolean update(Creature cr){
 		if(c.distance((Point2D) new Point(Math.round(cr.x), Math.round(cr.y)))<=dist){
-			score += MainClass.WIDTH-((60*20)-time);
+			score += MainState.BOARD_WIDTH-((60*20)-time);
 			i++;
 			if(i >= points.length){
 				score += time;
@@ -82,7 +82,7 @@ public class Trainer {
 		if(time <= 0){
 			int d = (int) c.distance((Point2D) new Point(Math.round(cr.x), Math.round(cr.y)));
 			
-			if(d <= MainClass.WIDTH/8) score += (MainClass.WIDTH/8)-d;
+			if(d <= MainState.BOARD_WIDTH/8) score += (MainState.BOARD_WIDTH/8)-d;
 			return true;
 		}
 		

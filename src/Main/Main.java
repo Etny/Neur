@@ -12,7 +12,7 @@ public class Main extends MainClass{
 	}
 
 	public Main() {
-		super(1280, 720, "Neur");  
+		super(1280, 900, "Neur");  
 	}
 
 	@Override
